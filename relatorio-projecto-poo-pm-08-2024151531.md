@@ -73,11 +73,11 @@ Escolha a linha e coluna (ex: 0 1):
 *   `[A/B/C]` Carta normal revelada.
 *   `[! / ?]` Carta especial revelada e efeito ativado.
 
-#### 4.2. Interface JavaFX
-*   *Visual:* Utilização de um GridPane com botões interativos.
-*   *Feedback:* Ao clicar, o botão revela o *Emoji* correspondente (🍎, 🍌, etc.).
-*   *Estado:* Painel informativo no topo com Labels dinâmicas para tentativas e pares.
-*   *Mensagens:* Uso de janelas de alerta para comunicar o desfecho da partida.
+#### 4.2. Interface JavaFX (Gráfica)
+*   **Visual:** Utilização de um `GridPane` com botões interativos.
+*   **Feedback:** Ao clicar, o botão revela o **Emoji** correspondente (🍎, 🍌, etc.).
+*   **Estado:** Painel informativo no topo com Labels dinâmicas para tentativas e pares.
+*   **Mensagens:** Uso de janelas de alerta para comunicar o desfecho da partida.
 
 ![JavaFX](javafx1.jpg)
 ![JavaFX](javafx2.jpg)
