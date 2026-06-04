@@ -32,17 +32,17 @@ A lógica do sistema foi estruturada para garantir a separação entre as regras
 
 | | Entidade | Responsabilidade Principal |
 | :--- | :--- | :--- |
-| 🎮 | **MotorJogo** | Atua como o controlador central. Gere as regras, valida se as cartas escolhidas formam par, controla as tentativas e verifica o fim do jogo. |
-| 🗺️ | **Tabuleiro** | Responsável por organizar a grelha, criar a coleção de cartas, baralhar as posições e fornecer acesso às cartas em coordenadas específicas. |
-| 🃏 | **Carta (Abstrata)** | Define o conceito base de uma peça: guarda o símbolo e controla se a carta está escondida, revelada ou já fixa no tabuleiro. |
-| 🃏 | **CartaNormal** | Representa uma peça comum do jogo, focada apenas na lógica clássica de formar pares. |
-| ✨ | **CartaEspecial** | Especialização que contém o método `aplicarEfeito()` para modificar variáveis globais do jogo ao ser ativada. |
+| 🎮 | **model.GameEngine** | Atua como o controlador central. Gere as regras, valida se as cartas escolhidas formam par, controla as tentativas e verifica o fim do jogo. |
+| 🗺️ | **model.Board** | Responsável por organizar a grelha, criar a coleção de cartas, baralhar as posições e fornecer acesso às cartas em coordenadas específicas. |
+| 🃏 | **model.Card (Abstrata)** | Define o conceito base de uma peça: guarda o símbolo e controla se a carta está escondida, revelada ou já fixa no tabuleiro. |
+| 🃏 | **model.NormalCard** | Representa uma peça comum do jogo, focada apenas na lógica clássica de formar pares. |
+| ✨ | **model.SpecialCard** | Especialização que contém o método `aplicarEfeito()` para modificar variáveis globais do jogo ao ser ativada. |
 
 #### 2.2. Relações Estruturais (POO)
 
-*   **🔼 Herança:** As classes `CartaNormal` e `CartaEspecial` herdam de `Carta`. Esta hierarquia permite tratar todas as peças de forma genérica no tabuleiro.
-*   **💎 Composição:** O `Tabuleiro` mantém uma relação de composição com a `Carta`. O tabuleiro é o "todo" responsável por criar e gerir o ciclo de vida das cartas.
-*   **🔌 Associação:** O `MotorJogo` mantém uma referência ao `Tabuleiro`. O motor utiliza esta ligação para consultar ou alterar o estado das peças durante as jogadas.
+*   **🔼 Herança:** As classes `model.NormalCard` e `model.SpecialCard` herdam de `model.Card`. Esta hierarquia permite tratar todas as peças de forma genérica no tabuleiro.
+*   **💎 Composição:** O `model.Board` mantém uma relação de composição com a `model.Card`. O tabuleiro é o "todo" responsável por criar e gerir o ciclo de vida das cartas.
+*   **🔌 Associação:** O `model.GameEngine` mantém uma referência ao `model.Board`. O motor utiliza esta ligação para consultar ou alterar o estado das peças durante as jogadas.
 
 ---
 
@@ -69,9 +69,9 @@ Tentativas: 12 | Pares: 1/8
 1 [*] [A] [A] [*]
 Escolha a linha e coluna (ex: 0 1): 
 ```
-*   `[*]` Carta virada para baixo.
-*   `[A/B/C]` Carta normal revelada.
-*   `[! / ?]` Carta especial revelada e efeito ativado.
+*   `[*]` model.Card virada para baixo.
+*   `[A/B/C]` model.Card normal revelada.
+*   `[! / ?]` model.Card especial revelada e efeito ativado.
 
 #### 4.2. Interface JavaFX
 *   **Visual:** Utilização de um `GridPane` com botões interativos.
