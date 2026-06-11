@@ -7,14 +7,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BoardTest {
 
     @Test
-    public void testBoardCreation() throws InvalidBoardException {
+    void testBoardCreation()  {
         Board board = new Board(4, 4);
         assertEquals(4, board.getRows());
         assertEquals(4, board.getCols());
     }
 
     @Test
-    public void testInvalidBoardSizeThrowsException() {
+    void testInvalidBoardSizeThrowsException() {
         assertThrows(
                 InvalidBoardException.class,
                 () -> new Board(-1, 4)
@@ -22,7 +22,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testOddBoardSizeThrowsException() {
+    void testOddBoardSizeThrowsException() {
         assertThrows(
                 InvalidBoardException.class,
                 () -> new Board(3, 3)

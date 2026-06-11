@@ -10,25 +10,25 @@ public class CardTest {
     private Card card;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         card = new NormalCard("A");
     }
 
     @Test
-    public void testNormalCardStartsHidden() {
+    void testNormalCardStartsHidden() {
         assertFalse(card.isRevealed());
         assertFalse(card.isFixed());
     }
 
     @Test
-    public void testFixCard() {
+    void testFixCard() {
         card.fix();
         assertTrue(card.isFixed());
         assertTrue(card.isRevealed());
     }
 
     @Test
-    public void testInvalidSymbol() {
+    void testInvalidSymbol() {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new NormalCard("")

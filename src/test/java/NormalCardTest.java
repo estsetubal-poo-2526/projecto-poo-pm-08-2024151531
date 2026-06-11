@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class NormalCardTest {
 
     @Test
-    public void testRevealCard() {
+    void testRevealCard() {
         NormalCard card = new NormalCard("A");
         card.reveal(null);
         assertTrue(card.isRevealed());

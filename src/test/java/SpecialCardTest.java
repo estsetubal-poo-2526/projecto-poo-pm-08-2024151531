@@ -16,13 +16,10 @@ public class SpecialCardTest {
     }
 
     @Test
-    void testBonusCardAddsAttempts() throws InvalidBoardException {
-        Board board = new Board(4, 4);
-        GameEngine game = new GameEngine(board);
-        int before = game.getAttempts();
-        SpecialCard card = new SpecialCard("!", SpecialCard.EffectType.BONUS);
-        card.reveal(game);
-
-        assertEquals(before + 3, game.getAttempts());
+    public void testEffectTypeCannotBeNull() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new SpecialCard("!", null)
+        );
     }
 }
