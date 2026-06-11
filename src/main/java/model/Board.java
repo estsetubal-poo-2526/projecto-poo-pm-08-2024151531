@@ -1,6 +1,7 @@
 package model;
 
 import exception.InvalidBoardException;
+import exception.InvalidMoveException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +12,11 @@ public class Board {
 
     private static final String[] SYMBOLS = {
             "🍎", "🍌", "🍒", "🍇", "🍓", "🍍", "🥝", "🍉",
-            "⭐", "🌙", "☀", "⚽", "🎲", "🎵", "🚗", "🚀"
+            "⭐", "🌙", "☀", "⚽", "🎲", "🎵", "🚗", "🚀",
+            "🐶", "🐱", "🐼", "🦁", "🐸", "🐵", "🐧", "🦊",
+            "🌻", "🌷", "🌵", "🍀", "🔥", "💧", "❄", "⚡",
+            "🍕", "🍔", "🍟", "🍩", "🍪", "🍫", "🍿", "🥨",
+            "🎮", "🎸", "🎯", "🏀", "🏆", "💎", "🔑", "🎁"
     };
 
     private final int rows;
@@ -63,7 +68,7 @@ public class Board {
         }
     }
 
-    public Card getCard(int row, int col) {
+    public Card getCard(int row, int col) throws InvalidMoveException {
         validatePosition(row, col);
         return cards[row][col];
     }
@@ -97,9 +102,9 @@ public class Board {
         return row >= 0 && row < rows && col >= 0 && col < cols;
     }
 
-    private void validatePosition(int row, int col) {
+    private void validatePosition(int row, int col) throws InvalidMoveException {
         if (!isValidPosition(row, col)) {
-            throw new IndexOutOfBoundsException("Posicao invalida.");
+            throw new InvalidMoveException("Posicao invalida.");
         }
     }
 

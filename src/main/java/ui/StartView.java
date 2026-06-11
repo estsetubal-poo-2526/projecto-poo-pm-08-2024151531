@@ -16,6 +16,7 @@ public class StartView extends BorderPane {
     private final TextField rowsField;
     private final TextField colsField;
     private final Button startButton;
+    private final Button exitButton;
     private StartGameHandler startGameHandler;
 
     public interface StartGameHandler {
@@ -26,6 +27,7 @@ public class StartView extends BorderPane {
         this.rowsField = new TextField("4");
         this.colsField = new TextField("4");
         this.startButton = new Button("Iniciar jogo");
+        this.exitButton = new Button("Sair");
 
         configureLayout();
         configureActions();
@@ -42,7 +44,7 @@ public class StartView extends BorderPane {
 
         GridPane form = createForm();
 
-        VBox content = new VBox(16, titleLabel, descriptionLabel, form, startButton);
+        VBox content = new VBox(16, titleLabel, descriptionLabel, form, startButton, exitButton);
         content.setAlignment(Pos.CENTER);
 
         setCenter(content);
@@ -84,6 +86,14 @@ public class StartView extends BorderPane {
 
     public void setStartGameHandler(StartGameHandler startGameHandler) {
         this.startGameHandler = startGameHandler;
+    }
+
+    public void setOnExitRequested(Runnable exitHandler) {
+        exitButton.setOnAction(event -> {
+            if (exitHandler != null) {
+                exitHandler.run();
+            }
+        });
     }
 
     public void showError(String message) {

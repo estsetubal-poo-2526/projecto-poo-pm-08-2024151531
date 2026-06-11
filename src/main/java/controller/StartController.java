@@ -21,6 +21,7 @@ public class StartController {
 
     private void configureActions() {
         startView.setStartGameHandler((rows, cols) -> startGame(rows, cols));
+        startView.setOnExitRequested(() -> exit());
     }
 
     public void show() {
@@ -40,5 +41,9 @@ public class StartController {
         } catch (InvalidBoardException exception) {
             startView.showError(exception.getMessage());
         }
+    }
+
+    private void exit() {
+        stage.close();
     }
 }

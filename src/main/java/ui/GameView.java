@@ -25,6 +25,7 @@ public class GameView extends BorderPane {
     private final Label statusLabel;
     private final GridPane boardGrid;
     private final Button newGameButton;
+    private final Button exitButton;
 
     private Button[][] cardButtons;
     private CardClickHandler cardClickHandler;
@@ -39,6 +40,7 @@ public class GameView extends BorderPane {
         this.statusLabel = new Label("Escolhe duas cartas.");
         this.boardGrid = new GridPane();
         this.newGameButton = new Button("Novo jogo");
+        this.exitButton = new Button("Sair");
 
         configureLayout();
     }
@@ -63,7 +65,7 @@ public class GameView extends BorderPane {
         HBox statsBox = new HBox(18, attemptsLabel, pairsLabel);
         statsBox.setAlignment(Pos.CENTER_LEFT);
 
-        HBox headerActions = new HBox(newGameButton);
+        HBox headerActions = new HBox(10, newGameButton, exitButton);
         headerActions.setAlignment(Pos.CENTER_RIGHT);
         HBox.setHgrow(headerActions, Priority.ALWAYS);
 
@@ -93,6 +95,14 @@ public class GameView extends BorderPane {
         newGameButton.setOnAction(event -> {
             if (newGameHandler != null) {
                 newGameHandler.run();
+            }
+        });
+    }
+
+    public void setOnExitRequested(Runnable exitHandler) {
+        exitButton.setOnAction(event -> {
+            if (exitHandler != null) {
+                exitHandler.run();
             }
         });
     }
@@ -163,7 +173,11 @@ public class GameView extends BorderPane {
         } else if (card.isRevealed()) {
             button.setText(card.getSymbol());
             button.setDisable(false);
-            button.setStyle("-fx-background-color: #f8fafc; -fx-border-color: #2563eb; -fx-border-width: 2;");
+            if (card instanceof SpecialCard) {
+                button.setStyle("-fx-background-color: #fef3c7; -fx-border-color: #f59e0b; -fx-border-width: 2;");
+            } else {
+                button.setStyle("-fx-background-color: #f8fafc; -fx-border-color: #2563eb; -fx-border-width: 2;");
+            }
         } else {
             button.setText(HIDDEN_SYMBOL);
             button.setDisable(false);

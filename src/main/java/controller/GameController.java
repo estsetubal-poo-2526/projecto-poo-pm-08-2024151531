@@ -29,6 +29,7 @@ public class GameController {
     private void configureActions() {
         gameView.setCardClickHandler((row, col) -> play(row, col));
         gameView.setOnNewGameRequested(() -> backToStart());
+        gameView.setOnExitRequested(() -> exit());
     }
 
     public void show() {
@@ -57,8 +58,6 @@ public class GameController {
             }
         } catch (InvalidMoveException exception) {
             gameView.showError(exception.getMessage());
-        } catch (IndexOutOfBoundsException exception) {
-            gameView.showError("Posicao invalida.");
         }
     }
 
@@ -110,6 +109,11 @@ public class GameController {
     private void checkEndGame() {
         if (gameEngine.isGameOver()) {
             gameView.setBoardDisabled(true);
+            if (gameEngine.isWinner()) {
+                gameView.setStatus("Ganhaste! Encontraste todos os pares.");
+            } else {
+                gameView.setStatus("Perdeste! Ficaste sem tentativas.");
+            }
             gameView.showEndGame(gameEngine.isWinner());
         }
     }
@@ -117,5 +121,9 @@ public class GameController {
     private void backToStart() {
         StartController startController = new StartController(stage);
         startController.show();
+    }
+
+    private void exit() {
+        stage.close();
     }
 }
