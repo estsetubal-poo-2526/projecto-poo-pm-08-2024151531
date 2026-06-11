@@ -24,14 +24,16 @@ public class SpecialCard extends Card {
     @Override
     public void reveal(GameEngine gameEngine) {
         setRevealed(true);
+    }
 
+    public void applyEffect(GameEngine gameEngine) {
         if (!effectApplied) {
-            applyEffect(gameEngine);
+            executeEffect(gameEngine);
             effectApplied = true;
         }
     }
 
-    private void applyEffect(GameEngine gameEngine) {
+    private void executeEffect(GameEngine gameEngine) {
         if (effectType == EffectType.BONUS) {
             gameEngine.addAttempts(3);
         } else if (effectType == EffectType.SHUFFLE) {

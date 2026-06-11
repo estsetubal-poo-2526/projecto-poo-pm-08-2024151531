@@ -10,6 +10,7 @@ public class GameEngine {
     private int pairsFound;
     private Card firstSelected;
     private Card secondSelected;
+    private SpecialCard selectedSpecialCard;
 
     public GameEngine(Board board) {
         if (board == null) {
@@ -19,6 +20,7 @@ public class GameEngine {
         this.board = board;
         this.attempts = INITIAL_ATTEMPTS;
         this.pairsFound = 0;
+        this.selectedSpecialCard = null;
     }
 
     public void play(int row, int col) throws InvalidMoveException {
@@ -36,18 +38,54 @@ public class GameEngine {
             throw new InvalidMoveException("Esta carta já foi revelada.");
         }
 
+        if (selectedCard instanceof SpecialCard && firstSelected != null) {
+            firstSelected.hide();
+            firstSelected = null;
+        }
+
         selectedCard.reveal(this);
 
-        if (firstSelected == null) {
+        if (selectedCard instanceof SpecialCard) {
+            selectedSpecialCard = (SpecialCard) selectedCard;
+        } else if (firstSelected == null) {
             firstSelected = selectedCard;
         } else {
             secondSelected = selectedCard;
             attempts--;
-            checkPair();
         }
     }
 
-    private void checkPair() {
+    public boolean hasTwoSelectedCards() {
+        return firstSelected != null && secondSelected != null;
+    }
+
+    public boolean hasSelectedSpecialCard() {
+        return selectedSpecialCard != null;
+    }
+
+    public SpecialCard.EffectType getSelectedSpecialEffectType() {
+        if (selectedSpecialCard == null) {
+            return null;
+        }
+
+        return selectedSpecialCard.getEffectType();
+    }
+
+    public void finishSpecialCard() {
+        if (selectedSpecialCard == null) {
+            return;
+        }
+
+        selectedSpecialCard.applyEffect(this);
+        selectedSpecialCard.fix();
+        selectedSpecialCard = null;
+    }
+
+    public void finishTurn() {
+        if (!hasTwoSelectedCards()) {
+            return;
+        }
+
         if (firstSelected.getSymbol().equals(secondSelected.getSymbol()) && firstSelected instanceof NormalCard && secondSelected instanceof NormalCard) {
 
             firstSelected.fix();

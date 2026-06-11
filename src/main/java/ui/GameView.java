@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import model.Board;
 import model.Card;
+import model.SpecialCard;
 
 public class GameView extends BorderPane {
 
@@ -150,9 +151,18 @@ public class GameView extends BorderPane {
     }
 
     private void updateCardButton(Button button, Card card) {
-        if (card.isRevealed() || card.isFixed()) {
+        if (card.isFixed()) {
+            if (card instanceof SpecialCard) {
+                button.setText(card.getSymbol());
+                button.setStyle("-fx-background-color: #fef3c7; -fx-border-color: #f59e0b; -fx-border-width: 2;");
+            } else {
+                button.setText("");
+                button.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+            }
+            button.setDisable(true);
+        } else if (card.isRevealed()) {
             button.setText(card.getSymbol());
-            button.setDisable(card.isFixed());
+            button.setDisable(false);
             button.setStyle("-fx-background-color: #f8fafc; -fx-border-color: #2563eb; -fx-border-width: 2;");
         } else {
             button.setText(HIDDEN_SYMBOL);

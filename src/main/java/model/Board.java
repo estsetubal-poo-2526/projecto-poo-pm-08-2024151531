@@ -5,8 +5,14 @@ import exception.InvalidBoardException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class Board {
+
+    private static final String[] SYMBOLS = {
+            "🍎", "🍌", "🍒", "🍇", "🍓", "🍍", "🥝", "🍉",
+            "⭐", "🌙", "☀", "⚽", "🎲", "🎵", "🚗", "🚀"
+    };
 
     private final int rows;
     private final int cols;
@@ -14,10 +20,13 @@ public class Board {
 
     public Board(int rows, int cols) throws InvalidBoardException {
         if (rows <= 0 || cols <= 0) {
-            throw new InvalidBoardException("Dimensão do tabuleiro tem que ser positiva.");
+            throw new InvalidBoardException("Dimensao do tabuleiro tem que ser positiva.");
         }
         if ((rows * cols) % 2 != 0) {
-            throw new InvalidBoardException("Tabuleiro tem que ter um número par de posições.");
+            throw new InvalidBoardException("Tabuleiro tem que ter um numero par de posicoes.");
+        }
+        if (getTotalNormalPairs(rows, cols) > SYMBOLS.length) {
+            throw new InvalidBoardException("Nao existem emojis suficientes para este tabuleiro.");
         }
 
         this.rows = rows;
@@ -30,13 +39,10 @@ public class Board {
     private void createCards() {
         List<Card> cardList = new ArrayList<>();
 
-        int totalCards = rows * cols;
-        int specialCards = 2;
-        int normalCards = totalCards - specialCards;
-        int numberOfPairs = normalCards / 2;
+        int numberOfPairs = getTotalNormalPairs();
 
         for (int i = 0; i < numberOfPairs; i++) {
-            String symbol = String.valueOf((char) ('A' + i));
+            String symbol = SYMBOLS[i];
 
             cardList.add(new NormalCard(symbol));
             cardList.add(new NormalCard(symbol));
@@ -45,7 +51,7 @@ public class Board {
         cardList.add(new SpecialCard("!", SpecialCard.EffectType.BONUS));
         cardList.add(new SpecialCard("?", SpecialCard.EffectType.SHUFFLE));
 
-        Collections.shuffle(cardList);
+        Collections.shuffle(cardList, new Random());
 
         int index = 0;
 
@@ -73,7 +79,7 @@ public class Board {
             }
         }
 
-        Collections.shuffle(unfixedCards);
+        Collections.shuffle(unfixedCards, new Random());
 
         int index = 0;
 
@@ -93,7 +99,7 @@ public class Board {
 
     private void validatePosition(int row, int col) {
         if (!isValidPosition(row, col)) {
-            throw new IndexOutOfBoundsException("Posição inválida.");
+            throw new IndexOutOfBoundsException("Posicao invalida.");
         }
     }
 
@@ -106,6 +112,14 @@ public class Board {
     }
 
     public int getTotalNormalPairs() {
+        return getTotalNormalPairs(rows, cols);
+    }
+
+    public int getInitialAttempts() {
+        return 15;
+    }
+
+    private static int getTotalNormalPairs(int rows, int cols) {
         return ((rows * cols) - 2) / 2;
     }
 }
