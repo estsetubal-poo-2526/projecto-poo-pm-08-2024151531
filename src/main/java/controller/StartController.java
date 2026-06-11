@@ -4,6 +4,7 @@ import exception.InvalidBoardException;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.Board;
+import model.GameDifficulty;
 import model.GameEngine;
 import ui.StartView;
 
@@ -20,7 +21,7 @@ public class StartController {
     }
 
     private void configureActions() {
-        startView.setStartGameHandler((rows, cols) -> startGame(rows, cols));
+        startView.setStartGameHandler(difficulty -> startGame(difficulty));
         startView.setOnExitRequested(() -> exit());
     }
 
@@ -32,9 +33,9 @@ public class StartController {
         stage.show();
     }
 
-    private void startGame(int rows, int cols) {
+    private void startGame(GameDifficulty difficulty) {
         try {
-            Board board = new Board(rows, cols);
+            Board board = new Board(difficulty);
             GameEngine gameEngine = new GameEngine(board);
             GameController gameController = new GameController(stage, gameEngine);
             gameController.show();

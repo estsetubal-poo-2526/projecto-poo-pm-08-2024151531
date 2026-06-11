@@ -4,7 +4,6 @@ import exception.InvalidMoveException;
 
 public class GameEngine {
 
-    private static final int INITIAL_ATTEMPTS = 15;
     private final Board board;
     private int attempts;
     private int pairsFound;
@@ -18,7 +17,7 @@ public class GameEngine {
         }
 
         this.board = board;
-        this.attempts = INITIAL_ATTEMPTS;
+        this.attempts = board.getInitialAttempts();
         this.pairsFound = 0;
         this.selectedSpecialCard = null;
     }

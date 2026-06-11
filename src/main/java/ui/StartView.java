@@ -4,28 +4,26 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import model.GameDifficulty;
 
 public class StartView extends BorderPane {
 
-    private final TextField rowsField;
-    private final TextField colsField;
+    private final ComboBox<GameDifficulty> difficultyComboBox;
     private final Button startButton;
     private final Button exitButton;
     private StartGameHandler startGameHandler;
 
     public interface StartGameHandler {
-        void handle(int rows, int cols);
+        void handle(GameDifficulty difficulty);
     }
 
     public StartView() {
-        this.rowsField = new TextField("4");
-        this.colsField = new TextField("4");
+        this.difficultyComboBox = new ComboBox<>();
         this.startButton = new Button("Iniciar jogo");
         this.exitButton = new Button("Sair");
 
@@ -40,31 +38,22 @@ public class StartView extends BorderPane {
         titleLabel.setFont(Font.font(26));
         titleLabel.setStyle("-fx-font-weight: bold;");
 
-        Label descriptionLabel = new Label("Escolhe o tamanho do tabuleiro.");
+        Label descriptionLabel = new Label("Escolhe a dificuldade.");
 
-        GridPane form = createForm();
+        configureDifficultyComboBox();
 
-        VBox content = new VBox(16, titleLabel, descriptionLabel, form, startButton, exitButton);
+        VBox content = new VBox(16, titleLabel, descriptionLabel, difficultyComboBox, startButton, exitButton);
         content.setAlignment(Pos.CENTER);
 
         setCenter(content);
     }
 
-    private GridPane createForm() {
-        GridPane form = new GridPane();
-        form.setAlignment(Pos.CENTER);
-        form.setHgap(10);
-        form.setVgap(10);
-
-        rowsField.setMaxWidth(80);
-        colsField.setMaxWidth(80);
-
-        form.add(new Label("Linhas:"), 0, 0);
-        form.add(rowsField, 1, 0);
-        form.add(new Label("Colunas:"), 0, 1);
-        form.add(colsField, 1, 1);
-
-        return form;
+    private void configureDifficultyComboBox() {
+        difficultyComboBox.getItems().add(GameDifficulty.EASY);
+        difficultyComboBox.getItems().add(GameDifficulty.MEDIUM);
+        difficultyComboBox.getItems().add(GameDifficulty.HARD);
+        difficultyComboBox.setValue(GameDifficulty.EASY);
+        difficultyComboBox.setMinWidth(180);
     }
 
     private void configureActions() {
@@ -72,15 +61,12 @@ public class StartView extends BorderPane {
     }
 
     private void startGame() {
-        try {
-            int rows = Integer.parseInt(rowsField.getText());
-            int cols = Integer.parseInt(colsField.getText());
+        GameDifficulty difficulty = difficultyComboBox.getValue();
 
-            if (startGameHandler != null) {
-                startGameHandler.handle(rows, cols);
-            }
-        } catch (NumberFormatException exception) {
-            showError("As linhas e colunas devem ser numeros inteiros.");
+        if (difficulty == null) {
+            showError("Escolhe uma dificuldade.");
+        } else if (startGameHandler != null) {
+            startGameHandler.handle(difficulty);
         }
     }
 

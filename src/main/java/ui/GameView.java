@@ -5,6 +5,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -14,6 +16,8 @@ import javafx.scene.text.Font;
 import model.Board;
 import model.Card;
 import model.SpecialCard;
+
+import java.io.InputStream;
 
 public class GameView extends BorderPane {
 
@@ -142,7 +146,8 @@ public class GameView extends BorderPane {
         cardButton.setMinSize(CARD_SIZE, CARD_SIZE);
         cardButton.setPrefSize(CARD_SIZE, CARD_SIZE);
         cardButton.setMaxSize(CARD_SIZE, CARD_SIZE);
-        cardButton.setFont(Font.font(28));
+        cardButton.setFont(Font.font("Segoe UI Emoji", 28));
+        cardButton.setStyle("-fx-padding: 0;");
         cardButton.setFocusTraversable(false);
         cardButton.setOnAction(event -> {
             if (cardClickHandler != null) {
@@ -164,25 +169,50 @@ public class GameView extends BorderPane {
         if (card.isFixed()) {
             if (card instanceof SpecialCard) {
                 button.setText(card.getSymbol());
-                button.setStyle("-fx-background-color: #fef3c7; -fx-border-color: #f59e0b; -fx-border-width: 2;");
+                button.setGraphic(null);
+                button.setStyle("-fx-padding: 0; -fx-background-color: #fef3c7; -fx-border-color: #f59e0b; -fx-border-width: 2;");
             } else {
                 button.setText("");
-                button.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+                button.setGraphic(null);
+                button.setStyle("-fx-padding: 0; -fx-background-color: transparent; -fx-border-color: transparent;");
             }
             button.setDisable(true);
         } else if (card.isRevealed()) {
-            button.setText(card.getSymbol());
+            if (card instanceof SpecialCard) {
+                button.setText(card.getSymbol());
+                button.setGraphic(null);
+            } else {
+                ImageView cardImage = createCardImage(card.getSymbol());
+                button.setGraphic(cardImage);
+                button.setText(cardImage == null ? card.getSymbol() : "");
+            }
             button.setDisable(false);
             if (card instanceof SpecialCard) {
-                button.setStyle("-fx-background-color: #fef3c7; -fx-border-color: #f59e0b; -fx-border-width: 2;");
+                button.setStyle("-fx-padding: 0; -fx-background-color: #fef3c7; -fx-border-color: #f59e0b; -fx-border-width: 2;");
             } else {
-                button.setStyle("-fx-background-color: #f8fafc; -fx-border-color: #2563eb; -fx-border-width: 2;");
+                button.setStyle("-fx-padding: 0; -fx-background-color: #f8fafc; -fx-border-color: #2563eb; -fx-border-width: 2;");
             }
         } else {
             button.setText(HIDDEN_SYMBOL);
+            button.setGraphic(null);
             button.setDisable(false);
-            button.setStyle("-fx-background-color: #2563eb; -fx-text-fill: white;");
+            button.setStyle("-fx-padding: 0; -fx-background-color: #2563eb; -fx-text-fill: white;");
         }
+    }
+
+    private ImageView createCardImage(String imageName) {
+        InputStream imageStream = getClass().getResourceAsStream("/images/" + imageName + ".png");
+
+        if (imageStream == null) {
+            return null;
+        }
+
+        Image image = new Image(imageStream);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(44);
+        imageView.setFitHeight(44);
+        imageView.setPreserveRatio(true);
+        return imageView;
     }
 
     public void setStatus(String message) {

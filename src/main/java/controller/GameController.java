@@ -33,7 +33,7 @@ public class GameController {
     }
 
     public void show() {
-        Scene scene = new Scene(gameView, 640, 620);
+        Scene scene = new Scene(gameView, 900, 880);
 
         stage.setTitle("Jogo da Memoria");
         stage.setScene(scene);

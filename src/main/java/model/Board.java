@@ -11,31 +11,54 @@ import java.util.Random;
 public class Board {
 
     private static final String[] SYMBOLS = {
-            "🍎", "🍌", "🍒", "🍇", "🍓", "🍍", "🥝", "🍉",
-            "⭐", "🌙", "☀", "⚽", "🎲", "🎵", "🚗", "🚀",
-            "🐶", "🐱", "🐼", "🦁", "🐸", "🐵", "🐧", "🦊",
-            "🌻", "🌷", "🌵", "🍀", "🔥", "💧", "❄", "⚡",
-            "🍕", "🍔", "🍟", "🍩", "🍪", "🍫", "🍿", "🥨",
-            "🎮", "🎸", "🎯", "🏀", "🏆", "💎", "🔑", "🎁"
+            "apple", "banana", "cherries", "grapes", "strawberry", "pineapple", "kiwi_fruit", "watermelon",
+            "star", "crescent_moon", "sun", "soccer_ball", "game_die", "musical_note", "car", "rocket",
+            "dog_face", "cat_face", "panda", "lion", "frog", "monkey_face", "penguin", "fox",
+            "sunflower", "tulip", "cactus", "four_leaf_clover", "fire", "droplet", "snowflake", "high_voltage",
+            "pizza", "hamburger", "french_fries", "doughnut", "cookie", "chocolate_bar", "popcorn", "pretzel",
+            "video_game", "guitar", "bullseye", "basketball", "trophy", "gem_stone", "key", "wrapped_gift"
     };
 
     private final int rows;
     private final int cols;
+    private final int specialCards;
+    private final int initialAttempts;
     private final Card[][] cards;
 
     public Board(int rows, int cols) throws InvalidBoardException {
+        this(rows, cols, 2, 15);
+    }
+
+    public Board(GameDifficulty difficulty) throws InvalidBoardException {
+        this(
+                difficulty.getRows(),
+                difficulty.getCols(),
+                difficulty.getSpecialCards(),
+                difficulty.getInitialAttempts()
+        );
+    }
+
+    private Board(int rows, int cols, int specialCards, int initialAttempts) throws InvalidBoardException {
         if (rows <= 0 || cols <= 0) {
             throw new InvalidBoardException("Dimensao do tabuleiro tem que ser positiva.");
         }
         if ((rows * cols) % 2 != 0) {
             throw new InvalidBoardException("Tabuleiro tem que ter um numero par de posicoes.");
         }
-        if (getTotalNormalPairs(rows, cols) > SYMBOLS.length) {
-            throw new InvalidBoardException("Nao existem emojis suficientes para este tabuleiro.");
+        if (specialCards <= 0 || specialCards % 2 != 0) {
+            throw new InvalidBoardException("Numero de cartas especiais invalido.");
+        }
+        if (specialCards >= rows * cols) {
+            throw new InvalidBoardException("O tabuleiro precisa de cartas normais.");
+        }
+        if (getTotalNormalPairs(rows, cols, specialCards) > SYMBOLS.length) {
+            throw new InvalidBoardException("Nao existem imagens suficientes para este tabuleiro.");
         }
 
         this.rows = rows;
         this.cols = cols;
+        this.specialCards = specialCards;
+        this.initialAttempts = initialAttempts;
         this.cards = new Card[rows][cols];
 
         createCards();
@@ -53,8 +76,13 @@ public class Board {
             cardList.add(new NormalCard(symbol));
         }
 
-        cardList.add(new SpecialCard("!", SpecialCard.EffectType.BONUS));
-        cardList.add(new SpecialCard("?", SpecialCard.EffectType.SHUFFLE));
+        for (int i = 0; i < specialCards; i++) {
+            if (i % 2 == 0) {
+                cardList.add(new SpecialCard("!", SpecialCard.EffectType.BONUS));
+            } else {
+                cardList.add(new SpecialCard("?", SpecialCard.EffectType.SHUFFLE));
+            }
+        }
 
         Collections.shuffle(cardList, new Random());
 
@@ -117,14 +145,14 @@ public class Board {
     }
 
     public int getTotalNormalPairs() {
-        return getTotalNormalPairs(rows, cols);
+        return getTotalNormalPairs(rows, cols, specialCards);
     }
 
     public int getInitialAttempts() {
-        return 15;
+        return initialAttempts;
     }
 
-    private static int getTotalNormalPairs(int rows, int cols) {
-        return ((rows * cols) - 2) / 2;
+    private static int getTotalNormalPairs(int rows, int cols, int specialCards) {
+        return ((rows * cols) - specialCards) / 2;
     }
 }
