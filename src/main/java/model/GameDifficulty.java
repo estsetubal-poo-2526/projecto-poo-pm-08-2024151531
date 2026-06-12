@@ -5,9 +5,9 @@ package model;
  * Cada dificuldade define o tamanho do tabuleiro, cartas especiais e tentativas.
  */
 public enum GameDifficulty {
-    EASY("Fácil 4x4", 4, 4, 2, 12),
-    MEDIUM("Médio 6x6", 6, 6, 4, 28),
-    HARD("Difícil 8x8", 8, 8, 6, 44);
+    EASY("Fácil 4x4", 4, 4, 2, 25),
+    MEDIUM("Médio 6x6", 6, 6, 4, 60),
+    HARD("Difícil 8x8", 8, 8, 6, 110);
 
     private final String description;
     private final int rows;
