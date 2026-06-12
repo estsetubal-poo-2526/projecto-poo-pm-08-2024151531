@@ -19,19 +19,19 @@ public class GameEngineTest {
     }
 
     @Test
-    void testGameEngineCreation() {
+    void defaultGameEngineCreation() {
         assertNotNull(game);
     }
 
     @Test
-    void testAddAttempts() {
+    void isAddAttempts() {
         int before = game.getAttempts();
         game.addAttempts(3);
         assertEquals(before + 3, game.getAttempts());
     }
 
     @Test
-    void testNullBoardThrowsException() {
+    void isNullBoardThrowsException() {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new GameEngine(null)
