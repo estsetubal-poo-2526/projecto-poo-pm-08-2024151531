@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SpecialCardTest {
 
     @Test
-    void testNullEffectThrowsException() {
+    void nullEffectThrowsException() {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new SpecialCard("!", null)
@@ -16,7 +16,7 @@ public class SpecialCardTest {
     }
 
     @Test
-    public void testEffectTypeCannotBeNull() {
+    void effectTypeCannotBeNullThrowsException() {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new SpecialCard("!", null)

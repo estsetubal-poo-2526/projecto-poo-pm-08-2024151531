@@ -11,9 +11,11 @@ public class GameEngineTest {
     private GameEngine game;
 
     @BeforeEach
-    void setUp() throws InvalidBoardException {
-        board = new Board(4, 4);
-        game = new GameEngine(board);
+    void setUp() {
+        assertDoesNotThrow(() -> {
+            board = new Board(4, 4);
+            game = new GameEngine(board);
+        });
     }
 
     @Test

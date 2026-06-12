@@ -15,20 +15,20 @@ public class CardTest {
     }
 
     @Test
-    void testNormalCardStartsHidden() {
+    void isNormalCardStartsHidden() {
         assertFalse(card.isRevealed());
         assertFalse(card.isFixed());
     }
 
     @Test
-    void testFixCard() {
+    void isFixCard() {
         card.fix();
         assertTrue(card.isFixed());
         assertTrue(card.isRevealed());
     }
 
     @Test
-    void testInvalidSymbol() {
+    void invalidSymbolThrowsException() {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new NormalCard("")
