@@ -354,6 +354,6 @@ public class GameView extends BorderPane {
         alert.setContentText(won
                 ? "Encontraste todos os pares."
                 : "Ficaste sem tentativas.");
-        alert.showAndWait();
+        alert.show();
     }
 }
