@@ -19,6 +19,10 @@ import model.SpecialCard;
 
 import java.io.InputStream;
 
+/**
+ * Representa a interface gráfica principal do jogo.
+ * Mostra o tabuleiro, tentativas, pares e mensagens ao jogador.
+ */
 public class GameView extends BorderPane {
 
     private static final String HIDDEN_SYMBOL = "*";
@@ -34,10 +38,23 @@ public class GameView extends BorderPane {
     private Button[][] cardButtons;
     private CardClickHandler cardClickHandler;
 
+    /**
+     * Interface usada para avisar quando uma carta é clicada.
+     */
     public interface CardClickHandler {
+
+        /**
+         * Trata o clique numa carta.
+         *
+         * @param row linha da carta
+         * @param col coluna da carta
+         */
         void handle(int row, int col);
     }
 
+    /**
+     * Cria a vista principal do jogo.
+     */
     public GameView() {
         this.attemptsLabel = new Label();
         this.pairsLabel = new Label();
@@ -49,6 +66,9 @@ public class GameView extends BorderPane {
         configureLayout();
     }
 
+    /**
+     * Configura a organização visual da interface.
+     */
     private void configureLayout() {
         setPadding(new Insets(18));
         setTop(createHeader());
@@ -61,8 +81,13 @@ public class GameView extends BorderPane {
         BorderPane.setMargin(boardGrid, new Insets(20, 0, 20, 0));
     }
 
+    /**
+     * Cria o cabeçalho da interface.
+     *
+     * @return cabeçalho da janela
+     */
     private VBox createHeader() {
-        Label titleLabel = new Label("Jogo da Memoria");
+        Label titleLabel = new Label("Jogo da Memória");
         titleLabel.setFont(Font.font(24));
         titleLabel.setStyle("-fx-font-weight: bold;");
 
@@ -82,6 +107,11 @@ public class GameView extends BorderPane {
         return header;
     }
 
+    /**
+     * Cria o rodapé da interface.
+     *
+     * @return rodapé da janela
+     */
     private HBox createFooter() {
         Label helpLabel = new Label("Encontra todos os pares antes das tentativas acabarem.");
         helpLabel.setStyle("-fx-text-fill: #555555;");
@@ -91,10 +121,20 @@ public class GameView extends BorderPane {
         return footer;
     }
 
+    /**
+     * Define o comportamento ao clicar numa carta.
+     *
+     * @param cardClickHandler controlador do clique
+     */
     public void setCardClickHandler(CardClickHandler cardClickHandler) {
         this.cardClickHandler = cardClickHandler;
     }
 
+    /**
+     * Define o comportamento do botão de novo jogo.
+     *
+     * @param newGameHandler ação a executar
+     */
     public void setOnNewGameRequested(Runnable newGameHandler) {
         newGameButton.setOnAction(event -> {
             if (newGameHandler != null) {
@@ -103,6 +143,11 @@ public class GameView extends BorderPane {
         });
     }
 
+    /**
+     * Define o comportamento do botão de sair.
+     *
+     * @param exitHandler ação a executar
+     */
     public void setOnExitRequested(Runnable exitHandler) {
         exitButton.setOnAction(event -> {
             if (exitHandler != null) {
@@ -111,6 +156,14 @@ public class GameView extends BorderPane {
         });
     }
 
+    /**
+     * Atualiza a interface com o estado atual do jogo.
+     *
+     * @param board tabuleiro do jogo
+     * @param attempts tentativas restantes
+     * @param pairsFound pares encontrados
+     * @param totalPairs total de pares
+     */
     public void refresh(Board board, int attempts, int pairsFound, int totalPairs) {
         attemptsLabel.setText("Tentativas: " + attempts);
         pairsLabel.setText("Pares: " + pairsFound + "/" + totalPairs);
@@ -122,12 +175,23 @@ public class GameView extends BorderPane {
         updateBoard(board);
     }
 
+    /**
+     * Indica se o tabuleiro visual tem de ser reconstruído.
+     *
+     * @param board tabuleiro do jogo
+     * @return true se for necessário reconstruir
+     */
     private boolean mustRebuildBoard(Board board) {
         return cardButtons == null
                 || cardButtons.length != board.getRows()
                 || cardButtons[0].length != board.getCols();
     }
 
+    /**
+     * Cria os botões das cartas.
+     *
+     * @param board tabuleiro do jogo
+     */
     private void buildBoard(Board board) {
         boardGrid.getChildren().clear();
         cardButtons = new Button[board.getRows()][board.getCols()];
@@ -141,6 +205,13 @@ public class GameView extends BorderPane {
         }
     }
 
+    /**
+     * Cria um botão para uma carta.
+     *
+     * @param row linha da carta
+     * @param col coluna da carta
+     * @return botão da carta
+     */
     private Button createCardButton(int row, int col) {
         Button cardButton = new Button(HIDDEN_SYMBOL);
         cardButton.setMinSize(CARD_SIZE, CARD_SIZE);
@@ -157,6 +228,11 @@ public class GameView extends BorderPane {
         return cardButton;
     }
 
+    /**
+     * Atualiza todos os botões do tabuleiro.
+     *
+     * @param board tabuleiro do jogo
+     */
     private void updateBoard(Board board) {
         for (int row = 0; row < board.getRows(); row++) {
             for (int col = 0; col < board.getCols(); col++) {
@@ -165,6 +241,12 @@ public class GameView extends BorderPane {
         }
     }
 
+    /**
+     * Atualiza a aparência de uma carta.
+     *
+     * @param button botão da carta
+     * @param card carta do modelo
+     */
     private void updateCardButton(Button button, Card card) {
         if (card.isFixed()) {
             if (card instanceof SpecialCard) {
@@ -200,6 +282,12 @@ public class GameView extends BorderPane {
         }
     }
 
+    /**
+     * Cria a imagem de uma carta normal.
+     *
+     * @param imageName nome da imagem
+     * @return imagem da carta
+     */
     private ImageView createCardImage(String imageName) {
         InputStream imageStream = getClass().getResourceAsStream("/images/" + imageName + ".png");
 
@@ -215,10 +303,20 @@ public class GameView extends BorderPane {
         return imageView;
     }
 
+    /**
+     * Atualiza a mensagem de estado.
+     *
+     * @param message mensagem a mostrar
+     */
     public void setStatus(String message) {
         statusLabel.setText(message);
     }
 
+    /**
+     * Ativa ou desativa o tabuleiro.
+     *
+     * @param disabled true para desativar
+     */
     public void setBoardDisabled(boolean disabled) {
         if (cardButtons == null) {
             return;
@@ -231,18 +329,28 @@ public class GameView extends BorderPane {
         }
     }
 
+    /**
+     * Mostra uma mensagem de erro.
+     *
+     * @param message mensagem a mostrar
+     */
     public void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Jogada invalida");
+        alert.setTitle("Jogada inválida");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
 
+    /**
+     * Mostra a mensagem final do jogo.
+     *
+     * @param won true se o jogador ganhou
+     */
     public void showEndGame(boolean won) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Fim do jogo");
-        alert.setHeaderText(won ? "Vitoria!" : "Derrota!");
+        alert.setHeaderText(won ? "Vitória!" : "Derrota!");
         alert.setContentText(won
                 ? "Encontraste todos os pares."
                 : "Ficaste sem tentativas.");

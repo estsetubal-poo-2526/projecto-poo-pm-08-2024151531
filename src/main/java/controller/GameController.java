@@ -9,6 +9,10 @@ import model.GameEngine;
 import model.SpecialCard;
 import ui.GameView;
 
+/**
+ * Controla o ecrã principal do jogo.
+ * Liga a interface gráfica ao motor do jogo.
+ */
 public class GameController {
 
     private final Stage stage;
@@ -16,6 +20,12 @@ public class GameController {
     private final GameView gameView;
     private boolean waitingForTurnEnd;
 
+    /**
+     * Cria o controlador do jogo.
+     *
+     * @param stage janela principal da aplicação
+     * @param gameEngine motor com a lógica do jogo
+     */
     public GameController(Stage stage, GameEngine gameEngine) {
         this.stage = stage;
         this.gameEngine = gameEngine;
@@ -26,20 +36,32 @@ public class GameController {
         updateView();
     }
 
+    /**
+     * Configura as ações dos botões e das cartas.
+     */
     private void configureActions() {
         gameView.setCardClickHandler((row, col) -> play(row, col));
         gameView.setOnNewGameRequested(() -> backToStart());
         gameView.setOnExitRequested(() -> exit());
     }
 
+    /**
+     * Mostra a janela do jogo.
+     */
     public void show() {
         Scene scene = new Scene(gameView, 900, 880);
 
-        stage.setTitle("Jogo da Memoria");
+        stage.setTitle("Jogo da Memória");
         stage.setScene(scene);
         stage.show();
     }
 
+    /**
+     * Processa uma jogada feita pelo jogador.
+     *
+     * @param row linha da carta escolhida
+     * @param col coluna da carta escolhida
+     */
     private void play(int row, int col) {
         if (waitingForTurnEnd) {
             return;
@@ -61,6 +83,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Atualiza a interface com o estado atual do jogo.
+     */
     private void updateView() {
         gameView.refresh(
                 gameEngine.getBoard(),
@@ -72,6 +97,9 @@ public class GameController {
         gameView.setStatus("Escolhe duas cartas.");
     }
 
+    /**
+     * Aplica o efeito de uma carta especial após uma pequena pausa.
+     */
     private void finishSpecialCardWithDelay() {
         waitingForTurnEnd = true;
         gameView.setBoardDisabled(true);
@@ -92,6 +120,9 @@ public class GameController {
         pause.play();
     }
 
+    /**
+     * Termina a jogada após mostrar as duas cartas ao jogador.
+     */
     private void finishTurnWithDelay() {
         waitingForTurnEnd = true;
         gameView.setBoardDisabled(true);
@@ -106,6 +137,9 @@ public class GameController {
         pause.play();
     }
 
+    /**
+     * Verifica se o jogo terminou por vitória ou derrota.
+     */
     private void checkEndGame() {
         if (gameEngine.isGameOver()) {
             gameView.setBoardDisabled(true);
@@ -118,11 +152,17 @@ public class GameController {
         }
     }
 
+    /**
+     * Volta ao ecrã inicial.
+     */
     private void backToStart() {
         StartController startController = new StartController(stage);
         startController.show();
     }
 
+    /**
+     * Fecha a aplicação.
+     */
     private void exit() {
         stage.close();
     }
